@@ -220,17 +220,53 @@ SELECT MIN(MONTOTOTAL) FROM FACTURA;
 -- Cual es el monto promedio
 SELECT AVG(MONTOTOTAL) FROM FACTURA;
 
+-- Mostrar la cantidad de productos de la categoria BEBIDA
+SELECT COUNT(*)
+FROM PRODUCTO, CATEGORIA
+WHERE PRODUCTO.IDCAT = CATEGORIA.ID
+AND CATEGORIA.DESCRIPCION = "BEBIDA";
 
+-- Mostrar el promedio de los productos de la categoria COMIDA
+SELECT AVG(PRECIO)
+FROM PRODUCTO, CATEGORIA
+WHERE PRODUCTO.IDCAT = CATEGORIA.ID
+AND CATEGORIA.DESCRIPCION = "COMIDA";
 
+-- Mostrar cuantas veces se han vendido el producto Hamburguesa Doble
+SELECT COUNT(*) 
+FROM VENDE, PRODUCTO
+WHERE VENDE.CODIGO = PRODUCTO.CODIGO
+AND PRODUCTO.NOMBRE = 'Hamburguesa Doble';
 
+-- Mosrar cuantas Hamburguesas Dobles se han vendido en total
+SELECT SUM(VENDE.CANTIDAD) 
+FROM VENDE, PRODUCTO
+WHERE VENDE.CODIGO = PRODUCTO.CODIGO
+AND PRODUCTO.NOMBRE = 'Hamburguesa Doble';
 
+-- Mostrar la cantidad total comprada por Joaquin Chumacero del producto Hamburguesa Doble
+SELECT SUM(VENDE.CANTIDAD) AS TOTALBENDIDO -- nombre de la columna
+FROM FACTURA, VENDE, PRODUCTO
+WHERE VENDE.CODIGO = PRODUCTO.CODIGO
+AND VENDE.NROFACTURA = FACTURA.NROF
+AND VENDE.CODIGO = PRODUCTO.CODIGO
+AND PRODUCTO.NOMBRE = 'Hamburguesa Doble';
 
+-- Mostrar todos los producots que no se han vendido
+SELECT * FROM PRODUCTO
+WHERE PRODUCTO.CODIGO NOT IN (SELECT VENDE.CODIGO FROM VENDE);
 
+-- Mostrar todos los productos que si se han vendido
+SELECT * FROM PRODUCTO
+WHERE PRODUCTO.CODIGO IN (SELECT VENDE.CODIGO FROM VENDE);
 
-
-
-
-
+-- Mostrar la cantidad de facturas realizadas por la venta de productos de la categoria bebidas
+SELECT COUNT(*) 
+FROM FACTURA, VENDE, PRODUCTO, CATEGORIA
+WHERE FACTURA.NROF = VENDE.NROFACTURA
+AND VENDE.CODIGO = PRODUCTO.CODIGO
+AND PRODUCTO.IDCAT = CATEGORIA.ID
+AND CATEGORIA.DESCRIPCION = 'BEBIDA';
 
 
 /*
