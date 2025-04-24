@@ -158,6 +158,7 @@ AND T.IDHORARIO = H.ID
 AND G.NOMBRE = 'SA'
 AND M.NOMBRE = 'BASE DE DATOS 1';
 
+
 -- primer parcial va a ser miercoles 23 
 -- no se puede llevar nuestras propias maquinas sino usar la del laboratorio
 -- carnet de identidad
