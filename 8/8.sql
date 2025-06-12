@@ -1,0 +1,205 @@
+CREATE DATABASE MATERIALBIBLIOGRAFICOSC;			
+USE MATERIALBIBLIOGRAFICOSC;			
+
+CREATE TABLE TIPO			
+(			
+ID INTEGER NOT NULL PRIMARY KEY,			
+DESCRIPCION VARCHAR(20) NOT NULL			
+);			
+			
+INSERT INTO TIPO (ID, DESCRIPCION) VALUES			
+(1, 'ESTUDIANTE'),			
+(2, 'DOCENTE'),			
+(3, 'ADMINISTRATIVO');			
+			
+SELECT *			
+FROM TIPO;			
+			
+CREATE TABLE LECTOR			
+(			
+CI  INTEGER NOT NULL PRIMARY KEY,			
+NOMBRE VARCHAR(50) NOT NULL,			
+TELEFONO INTEGER NOT NULL,			
+CORREO VARCHAR(30),			
+DIRECCION VARCHAR(30) NOT NULL,			
+IDTIPO INTEGER NOT NULL,			
+FOREIGN KEY(IDTIPO) REFERENCES TIPO(ID)			
+	ON UPDATE CASCADE		
+	ON DELETE CASCADE		
+);			
+			
+INSERT INTO LECTOR (CI, NOMBRE, TELEFONO, CORREO, DIRECCION, IDTIPO) VALUES			
+(111,'Susana Camacho',77615141,'scamacho@gmail.com','Urb. San Silvestre #334',1),			
+(222,'Nicolas Crespo',77625242,'ncrespo@gmail.com','Urbari #123',2),			
+(333,'Luciana Barba',77635343,'lbarba@gmail.com','Santos Dumont',3),			
+(444,'Andrea Oroza',77645444,'aoroza@gmail.com','Urb. España',1),			
+(555,'Geraldine Burgos',77655545,'gburgos@gmail.com','Porongo #321',2),			
+(666,'Fabricio Crapuzzi',77665646,'fcrapuzzi@gmail.com','Av. Libertad 101',3),			
+(777,'Cecilia Camacho',77675747,'ccamacho@gmail.com','Urb. San Silvestre #333',1);			
+			
+SELECT *			
+FROM LECTOR;			
+			
+CREATE TABLE MATERIALBIBLIOGRAFICO			
+(			
+CODIGO INTEGER NOT NULL PRIMARY KEY,			
+TITULO VARCHAR(30) NOT NULL,			
+NROPAG SMALLINT NOT NULL,			
+AÑO YEAR NOT NULL,			
+TIPO CHAR NOT NULL			
+);			
+			
+ALTER TABLE MATERIALBIBLIOGRAFICO			
+MODIFY TITULO VARCHAR(50) NOT NULL;			
+			
+INSERT INTO MATERIALBIBLIOGRAFICO(CODIGO, TITULO, NROPAG, AÑO, TIPO) VALUES			
+(100,'Bases de datos para principiantes',120,2022,'L'),			
+(101,'Fundamentos de ingeniería de software',220,2022,'L'),			
+(102,'Desarrollo web con HTML y CSS',140,2021,'L'),			
+(103,'Bases de datos avanzadas',160,2024,'L'),			
+(104,'Ciencia de datos con Python',220,2022,'L'),			
+(105,'Historia de la informática',150,2017,'L'),			
+(106,'Desarrollo en Java',150,2017,'L'),			
+			
+(107,'Sistemas de informacion geografica',150,2015,'T'),			
+(108,'Inteligencia artificial aplicada',95,2021,'T'),			
+(109,'Redes modernas',110,2020,'T'),			
+(110,'Seguridad en sistemas informáticos',130,2023,'T'),			
+(111,'Minería de datos práctica',100,2018,'T'),			
+(112,'Seguridad en aplicaciones móviles',180,2019,'T'),			
+(113,'Desarrollo de sistemas web',180,2019,'T'),			
+			
+(114,'Tecnología moderna',40,2022,'R'),			
+(115,'Avances científicos',35,2021,'R'),			
+(116,'Salud y tecnología',28,2020,'R'),			
+(117,'Educación digital',32,2023,'R'),			
+(118,'Medio ambiente y tecnología',27,2022,'R'),			
+(119,'Tecnología',30,2024,'R'),			
+(120,'Literatura y datos',33,2024,'R');			
+			
+SELECT *			
+FROM MATERIALBIBLIOGRAFICO;			
+			
+CREATE TABLE FICHAPRESTAMO			
+(			
+NRO INTEGER NOT NULL PRIMARY KEY,			
+FECHA DATE NOT NULL,			
+DIAS TINYINT NOT NULL,			
+CILECTOR INTEGER NOT NULL,			
+FOREIGN KEY(CILECTOR) REFERENCES LECTOR(CI)			
+ON UPDATE CASCADE			
+ON DELETE CASCADE,			
+CODIGOMB INTEGER NOT NULL,			
+FOREIGN KEY(CODIGOMB) REFERENCES MATERIALBIBLIOGRAFICO(CODIGO)			
+ON UPDATE CASCADE			
+ON DELETE CASCADE			
+);			
+			
+INSERT INTO FICHAPRESTAMO(NRO, FECHA, DIAS, CILECTOR, CODIGOMB) VALUES			
+(1000,'2025-05-10',2,111,101),			
+(1001,'2025-05-11',3,222,104),			
+(1002,'2025-05-12',2,333,116),			
+(1003,'2025-05-13',3,444,120),			
+(1004,'2025-05-14',4,555,117),			
+(1005,'2025-05-15',1,666,109),			
+(1006,'2025-05-16',1,777,119),			
+(1007,'2025-05-17',5,111,107),			
+(1008,'2025-05-18',3,222,110),			
+(1009,'2025-05-19',5,333,105),			
+(1010,'2025-05-20',5,111,113);
+			
+SELECT *			
+FROM FICHAPRESTAMO;			
+			
+CREATE TABLE LIBRO			
+(			
+CODIGO INTEGER NOT NULL PRIMARY KEY,			
+FOREIGN KEY(CODIGO) REFERENCES MATERIALBIBLIOGRAFICO(CODIGO)			
+ON UPDATE CASCADE			
+ON DELETE CASCADE,			
+EDITORIAL VARCHAR(20) NOT NULL,			
+EDICION TINYINT NOT NULL,			
+ISBN VARCHAR(10)			
+);			
+			
+INSERT INTO LIBRO(CODIGO, EDITORIAL, EDICION, ISBN) VALUES			
+(100,'ARBOL',1,'1-20-20'),			
+(101,'LUZ',2,'2-15-45'),			
+(102,'TECNO',1,'2-15-46'),			
+(103,'SOL',3,'4-21-12'),			
+(104,'ESTRELLA',1,'4-21-11'),			
+(105,'RÍO',2,'6-13-09'),			
+(106,'MAR',4,'6-13-07');			
+			
+SELECT *			
+FROM LIBRO;			
+			
+CREATE TABLE REVISTA			
+(			
+CODIGO INTEGER NOT NULL PRIMARY KEY,			
+FOREIGN KEY(CODIGO) REFERENCES MATERIALBIBLIOGRAFICO(CODIGO)			
+ON UPDATE CASCADE			
+ON DELETE CASCADE,			
+CATEGORIA VARCHAR(20) NOT NULL,			
+NRO TINYINT NOT NULL			
+);			
+			
+INSERT INTO REVISTA(CODIGO, CATEGORIA, NRO) VALUES			
+(114,'Tecnología',5),			
+(115,'Ciencia',12),			
+(116,'Salud',8),			
+(117,'Educación',3),			
+(118,'Medio Ambiente',7),			
+(119,'Historia',10),			
+(120,'Literatura',6);			
+			
+SELECT *			
+FROM REVISTA;			
+			
+CREATE TABLE TESIS			
+(			
+CODIGO INTEGER NOT NULL PRIMARY KEY,			
+FOREIGN KEY(CODIGO) REFERENCES MATERIALBIBLIOGRAFICO(CODIGO)			
+ON UPDATE CASCADE			
+ON DELETE CASCADE,			
+AREA VARCHAR(30) NOT NULL			
+);			
+			
+INSERT INTO TESIS(CODIGO, AREA) VALUES			
+(107,'Sitemas de Información'),			
+(108,'Inteligencia Artificial'),			
+(109,'Redes de Computadoras'),			
+(110,'Seguridad Informática'),			
+(111,'Minería de Datos'),			
+(112,'Ingeniería de Software'),			
+(113,'Desarrollo Web');			
+			
+SELECT *			
+FROM TESIS;			
+
+
+-- Mostrar las tesis (Todos sus datos de la tesis) publicados entre el año 2017 y 2020
+SELECT * 
+FROM MATERIALBIBLIOGRAFICO, TESIS
+WHERE MATERIALBIBLIOGRAFICO.CODIGO = TESIS.CODIGO
+AND MATERIALBIBLIOGRAFICO.TIPO = 'T'
+AND AÑO BETWEEN 2017 AND 2020;
+
+-- Mostrar la cantidad de material bibliografico libro, por cada lector
+SELECT LECTOR.CI, LECTOR.NOMBRE, COUNT(*)
+FROM LECTOR, FICHAPRESTAMO, MATERIALBIBLIOGRAFICO
+WHERE LECTOR.CI = FICHAPRESTAMO.CILECTOR
+AND FICHAPRESTAMO.CODIGOMB = MATERIALBIBLIOGRAFICO.CODIGO
+AND MATERIALBIBLIOGRAFICO.TIPO = 'L'
+GROUP BY LECTOR.CI;
+
+-- Mostrar el material bibliografico que no ha sido sacado de la biblioteca 
+SELECT MATERIALBIBLIOGRAFICO.CODIGO, MATERIALBIBLIOGRAFICO.TITULO
+FROM MATERIALBIBLIOGRAFICO
+WHERE MATERIALBIBLIOGRAFICO.CODIGO NOT IN
+(
+	SELECT FICHAPRESTAMO.CODIGOMB
+    FROM FICHAPRESTAMO
+);
+
+-- Mostrar los materiales bibliograficos que sean sacado más de una vez
